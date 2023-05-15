@@ -36,19 +36,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
               const SizedBox(height: 50,),
 
-              Container(
-                width: 300,
-                height: 400,
-                child: Image(
-                  image: AssetImage('assets/icons/belleza_logo.png'),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                child: Container(
+                  height: 650,
+                  width: MediaQuery.of(context).size.width/1.2,
+                  child: Image(
+                    image: AssetImage('assets/icons/belleza_splash_logo.png'),
+                  ),
                 ),
               ),
-
-              Center(child: Text("belleza".toUpperCase(),style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,),)),
-
-              SizedBox(height: 10,),
-
-              const Center(child: Text("The Skin, Hair and Laser Clinic ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
             ],
           ),
         ),

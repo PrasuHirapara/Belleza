@@ -68,7 +68,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             .signInWithCredential(credential)
             .then((value) async{
           await getUserPhoneNumber(FirebaseAuth.instance.currentUser!.uid);
-          if(phoneNumber == Phone_NumberController.text){
+          if(phoneNumber.toString() == Phone_NumberController.text){
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User Login successfully!'),duration: Duration(seconds: 1),));
           }else{
@@ -77,7 +77,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           }
         })
             .onError((error, stackTrace) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString()),duration: Duration(seconds: 3),));
         });
       }
     }

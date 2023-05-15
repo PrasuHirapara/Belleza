@@ -53,7 +53,7 @@ class _AboutState extends State<About> {
                 duration: Duration(seconds: 1),
                 child: Container(
                   width: MediaQuery.of(context).size.width/1.1,
-                  height: 700,
+                  height: 730,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)
@@ -149,7 +149,7 @@ class _AboutState extends State<About> {
                 duration: Duration(seconds: 1),
                 child: Container(
                   width: MediaQuery.of(context).size.width/1.1,
-                  height: 640,
+                  height: 670,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,

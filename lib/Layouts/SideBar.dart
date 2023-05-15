@@ -1,3 +1,5 @@
+import 'package:belleza/Layouts/HomePage.dart';
+import 'package:belleza/Layouts/SideBar_Layouts/ChatRoom.dart';
 import 'package:belleza/Layouts/SideBar_Layouts/Consultant.dart';
 import 'package:belleza/Layouts/SideBar_Layouts/SocialMedia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,6 +26,7 @@ class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context){
     return Drawer(
+      backgroundColor: Colors.grey[200],
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -40,33 +43,49 @@ class _SideBarState extends State<SideBar> {
                     shrinkWrap: true,
                     itemBuilder: (context,i){
                   var data = snapShot.data!.docs[i];
-                  return UserAccountsDrawerHeader(
-                      accountName: Text(data['first_name'].toString().toUpperCase() + " " + data['last_name'].toString().toUpperCase(),
-                        style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
-                      ),
-                      accountEmail: Text(data['email'],
-                        style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14,color: Colors.black),
-                      ),
-                      currentAccountPicture: CircleAvatar(
-                        child: ClipOval(
-                          child: GestureDetector(
-                            onTap: (){
 
-                            },
+                  HomePage.first_name = data['first_name'];
+                  HomePage.last_name = data['last_name'];
+                  HomePage.email = data['email'];
+                  HomePage.registration_date = data['registration_date'];
+                  HomePage.phone_number = data['phone_number'];
+                  HomePage.uid = data['user_uid'];
+                  if(data['admin'] == "true"){
+                    HomePage.isAdmin = true;
+                    print(HomePage.isAdmin);
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 9),
+                    child: UserAccountsDrawerHeader(
+                        decoration: BoxDecoration(
+                          color: Colors.blueGrey,
+                          borderRadius: BorderRadius.circular(25)
+                        ),
+                        accountName: Text(HomePage.first_name.toString().toUpperCase() + " " + HomePage.last_name.toString().toUpperCase(),
+                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
+                        ),
+                        accountEmail: Text(HomePage.email,
+                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14,color: Colors.black),
+                        ),
+                        currentAccountPicture: CircleAvatar(
+                          child: ClipOval(
                             child: Image(image: AssetImage('assets/icons/user_logo.png'),
                             fit: BoxFit.cover,
                             width: 90,
                             height: 90,
-                    ),
-                          ),
-                  )
-                  ));
+                      ),
+                    )
+                    )),
+                  );
                 });
               }else{
                 return CircularProgressIndicator();
               }
             },
           ),
+
+          Divider(height: 5,),
 
           ListTile(
             leading: Icon(Icons.local_offer),
@@ -89,7 +108,9 @@ class _SideBarState extends State<SideBar> {
             leading: Icon(Icons.contact_support),
             title: Text("Consultant",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Consultant()));
+              HomePage.isAdmin ?
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Consultant())) :
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom(title: HomePage.uid,)));
             },
           ),
 

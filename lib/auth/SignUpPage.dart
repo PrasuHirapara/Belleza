@@ -42,6 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
           final user = authResult.user;
 
           Map<String, dynamic> data = {
+            "admin" : "false",
             "first_name": userFirstNameController.text,
             "last_name": userLastNameController.text,
             "email": userIdController.text,
