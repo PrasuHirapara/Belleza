@@ -30,59 +30,62 @@ class _SideBarState extends State<SideBar> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          StreamBuilder(
-            stream:
-              FirebaseFirestore.instance
-                  .collection("users")
-                  .where("user_uid",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                  .snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapShot){
-              if(snapShot.hasData){
-                return ListView.builder(
-                    itemCount: snapShot.data!.docs.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context,i){
-                  var data = snapShot.data!.docs[i];
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: StreamBuilder(
+              stream:
+                FirebaseFirestore.instance
+                    .collection("users")
+                    .where("user_uid",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapShot){
+                if(snapShot.hasData){
+                  return ListView.builder(
+                      itemCount: snapShot.data!.docs.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context,i){
+                    var data = snapShot.data!.docs[i];
 
-                  HomePage.first_name = data['first_name'];
-                  HomePage.last_name = data['last_name'];
-                  HomePage.email = data['email'];
-                  HomePage.registration_date = data['registration_date'];
-                  HomePage.phone_number = data['phone_number'];
-                  HomePage.uid = data['user_uid'];
-                  if(data['admin'] == "true"){
-                    HomePage.isAdmin = true;
-                    print(HomePage.isAdmin);
-                  }
+                    HomePage.first_name = data['first_name'];
+                    HomePage.last_name = data['last_name'];
+                    HomePage.email = data['email'];
+                    HomePage.registration_date = data['registration_date'];
+                    HomePage.phone_number = data['phone_number'];
+                    HomePage.uid = data['user_uid'];
+                    if(data['admin'] == "true"){
+                      HomePage.isAdmin = true;
+                      print(HomePage.isAdmin);
+                    }
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 9),
-                    child: UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey,
-                          borderRadius: BorderRadius.circular(25)
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 9),
+                      child: UserAccountsDrawerHeader(
+                          decoration: BoxDecoration(
+                            color: Colors.blueGrey,
+                            borderRadius: BorderRadius.circular(25)
+                          ),
+                          accountName: Text(HomePage.first_name.toString().toUpperCase() + " " + HomePage.last_name.toString().toUpperCase(),
+                            style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
+                          ),
+                          accountEmail: Text(HomePage.email,
+                            style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14,color: Colors.black),
+                          ),
+                          currentAccountPicture: CircleAvatar(
+                            child: ClipOval(
+                              child: Image(image: AssetImage('assets/icons/user_logo.png'),
+                              fit: BoxFit.cover,
+                              width: 90,
+                              height: 90,
                         ),
-                        accountName: Text(HomePage.first_name.toString().toUpperCase() + " " + HomePage.last_name.toString().toUpperCase(),
-                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
-                        ),
-                        accountEmail: Text(HomePage.email,
-                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14,color: Colors.black),
-                        ),
-                        currentAccountPicture: CircleAvatar(
-                          child: ClipOval(
-                            child: Image(image: AssetImage('assets/icons/user_logo.png'),
-                            fit: BoxFit.cover,
-                            width: 90,
-                            height: 90,
-                      ),
-                    )
-                    )),
-                  );
-                });
-              }else{
-                return CircularProgressIndicator();
-              }
-            },
+                      )
+                      )),
+                    );
+                  });
+                }else{
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
           ),
 
           Divider(height: 5,),
@@ -97,28 +100,10 @@ class _SideBarState extends State<SideBar> {
 
 
           ListTile(
-            leading: Icon(Icons.message),
+            leading: Icon(Icons.bookmark_add),
             title: Text("Appointments",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => Appointments()));
-            },
-          ),
-
-          ListTile(
-            leading: Icon(Icons.contact_support),
-            title: Text("Consultant",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-            onTap: (){
-              HomePage.isAdmin ?
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Consultant())) :
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom(title: HomePage.uid,)));
-            },
-          ),
-
-          ListTile(
-            leading: Icon(Icons.rate_review_rounded),
-            title: Text("Reminder",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Reminder()));
             },
           ),
 
@@ -149,20 +134,20 @@ class _SideBarState extends State<SideBar> {
           ),
 
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text("Settings",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+            leading: Icon(Icons.info),
+            title: Text("About Us",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Setting()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
             },
           ),
 
           Divider(),
 
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text("About",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+            leading: Icon(Icons.settings),
+            title: Text("Settings",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Setting()));
             },
           ),
         ],

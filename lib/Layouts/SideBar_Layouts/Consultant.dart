@@ -20,8 +20,7 @@ class _Consultant extends State<Consultant> {
           child: Center(child: Text('Consultant')),
         ),
       ),
-      body: HomePage.isAdmin ?
-      ListView(
+      body: ListView(
           padding: EdgeInsets.zero,
           children: [
             SizedBox(height: 20,),
@@ -44,7 +43,7 @@ class _Consultant extends State<Consultant> {
                          children: [
                            Container(
                              decoration: BoxDecoration(
-                               color: Colors.grey[300],
+                               color: Colors.blueGrey[200],
                                borderRadius: BorderRadius.circular(40)
                              ),
                              child: GestureDetector(
@@ -78,10 +77,7 @@ class _Consultant extends State<Consultant> {
               },
              ),
            ]
-          ) :
-          Container(
-
-          ),
+          )
     );
   }
 }

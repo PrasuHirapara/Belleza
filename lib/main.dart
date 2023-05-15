@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Belleza',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: Colors.grey[350],
         appBarTheme: AppBarTheme(
           color: Colors.blueGrey,
           titleTextStyle: TextStyle(fontSize: 25,fontWeight: FontWeight.w500,color: Colors.black),
@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.blueGrey,
-
         )
       ),
+
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context,snapshot){

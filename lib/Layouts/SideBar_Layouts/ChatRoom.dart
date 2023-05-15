@@ -1,11 +1,11 @@
 import 'package:belleza/Layouts/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoom extends StatefulWidget {
   ChatRoom({Key? key, required this.title}) : super(key: key);
 
-  final String adminId = "ieDmUFNqFMWmZmCLoNldGQqNDcI3";
   final String title;
 
   @override
@@ -15,12 +15,14 @@ class ChatRoom extends StatefulWidget {
 class _ChatRoomState extends State<ChatRoom> {
 
   final _formKey = GlobalKey<FormState>();
+  final String adminId = "ieDmUFNqFMWmZmCLoNldGQqNDcI3";
   TextEditingController messageController = TextEditingController();
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -28,7 +30,7 @@ class _ChatRoomState extends State<ChatRoom> {
               stream: FirebaseFirestore.instance
                   .collection('chats')
                   .doc(widget.title)
-                  .collection(widget.adminId)
+                  .collection(widget.title)
                   .orderBy('timestamp', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -53,23 +55,24 @@ class _ChatRoomState extends State<ChatRoom> {
                   reverse: true,
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
-                   // bool isMe = docs[index]['senderId'] == HomePage.uid;
+                    bool isMe = (HomePage.isAdmin ? docs[index]['senderId'] == adminId : docs[index]['senderId'] != adminId);
                     return Container(
                       padding: EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 15),
+                          vertical: 10,
+                          horizontal: 15
+                      ),
                       alignment:
-                      docs[index]['senderId'] == HomePage.uid ? Alignment.centerRight : Alignment.centerLeft,
+                      isMe ? Alignment.centerRight : Alignment.centerLeft,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: docs[index]['senderId'] == HomePage.uid ? Colors.blue[100] : Colors.grey[300],
+                          color: isMe ? Colors.blue[100] : Colors.blueGrey[200],
                         ),
                         padding: EdgeInsets.symmetric(
                             vertical: 10, horizontal: 15),
                         child: Text(
                           docs[index]['message'],
-                          style: TextStyle(
-                              color: docs[index]['senderId'] == HomePage.uid ? Colors.black : Colors.black),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     );
@@ -121,11 +124,11 @@ class _ChatRoomState extends State<ChatRoom> {
                         FirebaseFirestore.instance
                             .collection('chats')
                             .doc(widget.title)
-                            .collection(widget.adminId)
+                            .collection(widget.title)
                             .add({
                           'message': messageController.text,
                           'timestamp': Timestamp.now(),
-                          'senderId': widget.title,
+                          'senderId': FirebaseAuth.instance.currentUser!.uid,
                         });
                         messageController.clear();
                       }
