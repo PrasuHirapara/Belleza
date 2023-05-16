@@ -2,6 +2,7 @@ import 'package:belleza/Layouts/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../Constants/Admin.dart';
 
 class ChatRoom extends StatefulWidget {
   ChatRoom({Key? key, required this.title}) : super(key: key);
@@ -15,16 +16,58 @@ class ChatRoom extends StatefulWidget {
 class _ChatRoomState extends State<ChatRoom> {
 
   final _formKey = GlobalKey<FormState>();
-  final String adminId = "ieDmUFNqFMWmZmCLoNldGQqNDcI3";
+  var userName = "";
   TextEditingController messageController = TextEditingController();
 
+  Future<void> getUserName(String userId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (documentSnapshot.exists) {
+        setState(() {
+          userName = documentSnapshot.data()!['first_name'] + " " + documentSnapshot.data()!['last_name'];
+        });
+        print(userName);
+      }
+    } catch (e) {
+      print('Error : $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    getUserName(widget.title);
+
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: Column(
         children: [
+          SizedBox(height: 38,),
+
+          HomePage.uid == adminId ? Container(
+            decoration: BoxDecoration(
+                color: Colors.blueGrey[800],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            width: MediaQuery.of(context).size.width/1.02,
+            height: 40,
+            child: Center(
+                child: Text(userName.toUpperCase(),style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.white70),)
+            ),
+          ) : Container(
+            decoration: BoxDecoration(
+              color: Colors.blueGrey[800],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            width: MediaQuery.of(context).size.width/1.02,
+            height: 40,
+            child: Center(child: Text("Dr. Krishna Bhalala",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.white70),)),
+          ),
+
+          SizedBox(height: 5,),
+
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -55,7 +98,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   reverse: true,
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
-                    bool isMe = (HomePage.isAdmin ? docs[index]['senderId'] == adminId : docs[index]['senderId'] != adminId);
+                    bool isMe = (isAdmin ? docs[index]['senderId'] == adminId : docs[index]['senderId'] != adminId);
                     return Container(
                       padding: EdgeInsets.symmetric(
                           vertical: 10,
@@ -66,14 +109,12 @@ class _ChatRoomState extends State<ChatRoom> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: isMe ? Colors.blue[100] : Colors.blueGrey[200],
+                          color: isMe ? Colors.blue[300] : Colors.blueGrey[200],
                         ),
                         padding: EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15),
-                        child: Text(
-                          docs[index]['message'],
-                          style: TextStyle(color: Colors.black),
+                            vertical: 10, horizontal: 15
                         ),
+                        child: Text(docs[index]['message'],style: TextStyle(color: Colors.black),),
                       ),
                     );
                   },

@@ -1,6 +1,4 @@
 import 'package:belleza/Layouts/HomePage.dart';
-import 'package:belleza/Layouts/SideBar_Layouts/ChatRoom.dart';
-import 'package:belleza/Layouts/SideBar_Layouts/Consultant.dart';
 import 'package:belleza/Layouts/SideBar_Layouts/SocialMedia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +9,6 @@ import 'SideBar_Layouts/Appointments.dart';
 import 'SideBar_Layouts/Offers.dart';
 import 'SideBar_Layouts/Payment.dart';
 import 'SideBar_Layouts/Policies.dart';
-import 'SideBar_Layouts/Reminder.dart';
 import 'SideBar_Layouts/Setting.dart';
 
 class SideBar extends StatefulWidget {
@@ -52,10 +49,6 @@ class _SideBarState extends State<SideBar> {
                     HomePage.registration_date = data['registration_date'];
                     HomePage.phone_number = data['phone_number'];
                     HomePage.uid = data['user_uid'];
-                    if(data['admin'] == "true"){
-                      HomePage.isAdmin = true;
-                      print(HomePage.isAdmin);
-                    }
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 9),
@@ -76,9 +69,10 @@ class _SideBarState extends State<SideBar> {
                               fit: BoxFit.cover,
                               width: 90,
                               height: 90,
-                        ),
-                      )
-                      )),
+                            ),
+                          )
+                        )
+                      ),
                     );
                   });
                 }else{

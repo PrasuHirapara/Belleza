@@ -58,7 +58,7 @@ class _SettingState extends State<Setting> {
               padding: const EdgeInsets.symmetric(horizontal: 17),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white70,
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(25)
                 ),
                 child: ListTile(
@@ -78,7 +78,7 @@ class _SettingState extends State<Setting> {
               padding: const EdgeInsets.symmetric(horizontal: 17),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white70,
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(25)
                 ),
                 child: ListTile(
@@ -98,7 +98,7 @@ class _SettingState extends State<Setting> {
               padding: const EdgeInsets.symmetric(horizontal: 17),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white70,
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(25)
                 ),
                 child: ListTile(
@@ -118,7 +118,7 @@ class _SettingState extends State<Setting> {
               padding: const EdgeInsets.symmetric(horizontal: 17),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white70,
+                    color: Colors.blueGrey[200],
                   borderRadius: BorderRadius.circular(25)
                 ),
                 child: ListTile(
@@ -158,7 +158,7 @@ class _SettingState extends State<Setting> {
               padding: const EdgeInsets.symmetric(horizontal: 17),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white70,
+                    color: Colors.blueGrey[200],
                     borderRadius: BorderRadius.circular(25)
                 ),
                 child: ListTile(
