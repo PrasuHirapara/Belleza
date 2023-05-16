@@ -18,7 +18,7 @@ class admin_HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    int _productImages = 0;
+    int _productImages = 1;
 
     return Scaffold(
       backgroundColor: Colors.grey[350],

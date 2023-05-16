@@ -23,10 +23,7 @@ class _Consultant extends State<Consultant> {
 
         body:StreamBuilder(
            stream:
-             FirebaseFirestore.instance
-                 .collection("users")
-                 .orderBy('timestamp',descending: true)
-                 .snapshots(),
+             FirebaseFirestore.instance.collection("users").snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapShot){
               if(snapShot.hasData){
                  return ListView.builder(
@@ -42,28 +39,31 @@ class _Consultant extends State<Consultant> {
                            children: [
                              SizedBox(height: 20,),
 
-                             Container(
-                               decoration: BoxDecoration(
-                                   color: Colors.blueGrey[200],
-                                   borderRadius: BorderRadius.circular(40)
+                             Hero(
+                               tag: 'consultantTOchatroom',
+                               child: Container(
+                                 decoration: BoxDecoration(
+                                     color: Colors.blueGrey[200],
+                                     borderRadius: BorderRadius.circular(40)
+                                 ),
+                                 child: snapShot.data!.docs[i] == adminId ? null : ListTile(
+                                   onTap: (){
+                                     Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom(title: snapShot.data!.docs[i]['user_uid'])));
+                                     },
+                                   leading: CircleAvatar(
+                                       child: ClipOval(
+                                         child: Image(image: AssetImage('assets/icons/user_logo.png'),
+                                           fit: BoxFit.cover,
+                                           width: 90,
+                                           height: 90,
+                                         ),
+                                       )
+                                   ),
+                                   title: Text(snapShot.data!.docs[i]['first_name'].toString().toUpperCase()+" "+snapShot.data!.docs[i]['last_name'].toString().toUpperCase(),
+                                     style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),
+                                   ),
+                                 )
                                ),
-                               child: snapShot.data!.docs[i] == adminId ? null : ListTile(
-                                 onTap: (){
-                                   Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom(title: snapShot.data!.docs[i]['user_uid'])));
-                                   },
-                                 leading: CircleAvatar(
-                                     child: ClipOval(
-                                       child: Image(image: AssetImage('assets/icons/user_logo.png'),
-                                         fit: BoxFit.cover,
-                                         width: 90,
-                                         height: 90,
-                                       ),
-                                     )
-                                 ),
-                                 title: Text(snapShot.data!.docs[i]['first_name'].toString().toUpperCase()+" "+snapShot.data!.docs[i]['last_name'].toString().toUpperCase(),
-                                   style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),
-                                 ),
-                               )
                              ),
                            ],
                          ),

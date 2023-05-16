@@ -46,15 +46,18 @@ class _ChatRoomState extends State<ChatRoom> {
         children: [
           SizedBox(height: 38,),
 
-          HomePage.uid == adminId ? Container(
-            decoration: BoxDecoration(
-                color: Colors.blueGrey[800],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            width: MediaQuery.of(context).size.width/1.02,
-            height: 40,
-            child: Center(
-                child: Text(userName.toUpperCase(),style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.white70),)
+          HomePage.uid == adminId ? Hero(
+            tag: 'consultantTOchatroom',
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.blueGrey[800],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: MediaQuery.of(context).size.width/1.02,
+              height: 40,
+              child: Center(
+                  child: Text(userName.toUpperCase(),style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.white70),)
+              ),
             ),
           ) : Container(
             decoration: BoxDecoration(

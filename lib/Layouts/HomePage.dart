@@ -1,11 +1,9 @@
 import 'package:belleza/Layouts/SideBar.dart';
-import 'package:belleza/Layouts/SideBar_Layouts/Appointments.dart';
 import 'package:belleza/Layouts/SideBar_Layouts/Offers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '../Constants/Admin.dart';
 import 'Admin/admin_HomePageState.dart';
 import 'SideBar_Layouts/ChatRoom.dart';
@@ -175,45 +173,6 @@ class user_HomePageState extends State<HomePage> {
               ),
           )
 
-        ],
-      ),
-
-      floatingActionButton: SpeedDial(
-        childMargin: EdgeInsets.only(bottom: 10), //margin bottom
-        icon: Icons.add,
-        activeIcon: Icons.close,
-        backgroundColor: Colors.blueGrey,
-        foregroundColor: Colors.black,
-        activeBackgroundColor: Colors.red,
-        activeForegroundColor: Colors.white,
-        buttonSize: Size(50, 50), //button size
-        visible: true,
-        closeManually: false,
-        curve: Curves.bounceIn,
-        overlayColor: Colors.black,
-        overlayOpacity: 0.5,
-
-        elevation: 8.0,
-        shape: CircleBorder(),
-
-        children: [
-          SpeedDialChild(
-            child: Icon(Icons.payment),
-            backgroundColor: Colors.blueGrey,
-            foregroundColor: Colors.white,
-            label: 'Payment',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => print('SECOND CHILD'),
-            onLongPress: () => print('SECOND CHILD LONG PRESS'),
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.bookmark_add),
-            backgroundColor: Colors.blueGrey,
-            foregroundColor: Colors.grey[300],
-            label: 'Book Appointment',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Appointments())),
-          ),
         ],
       ),
     );
