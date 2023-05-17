@@ -59,14 +59,17 @@ class _ChatRoomState extends State<ChatRoom> {
                   child: Text(userName.toUpperCase(),style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.white70),)
               ),
             ),
-          ) : Container(
-            decoration: BoxDecoration(
-              color: Colors.blueGrey[800],
-              borderRadius: BorderRadius.circular(10),
+          ) : Hero(
+            tag: 'homepageTOchatroom',
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[800],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: MediaQuery.of(context).size.width/1.02,
+              height: 40,
+              child: Center(child: Text("Dr. Krishna Bhalala",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.white70),)),
             ),
-            width: MediaQuery.of(context).size.width/1.02,
-            height: 40,
-            child: Center(child: Text("Dr. Krishna Bhalala",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.white70),)),
           ),
 
           SizedBox(height: 5,),

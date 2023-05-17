@@ -15,10 +15,10 @@ import '../SideBar_Layouts/Consultant.dart';
 import '../SideBar_Layouts/Offers.dart';
 
 class admin_HomePageState extends State<HomePage> {
+  int _productImages = 0;
 
   @override
   Widget build(BuildContext context) {
-    int _productImages = 1;
 
     return Scaffold(
       backgroundColor: Colors.grey[350],
@@ -39,132 +39,135 @@ class admin_HomePageState extends State<HomePage> {
         ],
       ),
 
-      body: Column(
-        children: [
-          SizedBox(height: 20,),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            SizedBox(height: 20,),
 
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('admin')
-                    .doc('offers')
-                    .collection(adminId)
-                    .orderBy('timestamp', descending: true)
-                    .snapshots(),
-                builder: (
-                    BuildContext context,
-                    AsyncSnapshot snapshot,
-                    ) {
-                  if (snapshot.data == null) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasData) {
-                    return Stack(
-                      children: [
-                        PageView.builder(
-                          onPageChanged: (num) {
-                            setState(() {
-                              _productImages = num;
-                            });
-                          },
-                          itemCount: snapshot.data!.docs.length,
-                          pageSnapping: true,
-                          itemBuilder: (BuildContext context,
-                              int index) {
-                            return Padding(
-                              padding:
-                              const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          20),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          spreadRadius: 1,
-                                          blurRadius: 5,
-                                          color: Colors.black,
-                                        ),
-                                      ],
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          20),
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => Offers(
-                                              title: snapshot.data!.docs[index]['image_url']))
-                                          );
-                                        },
-                                        child: Hero(
-                                          tag: 'home_TO_offers',
-                                          child: Image.network(
-                                            snapshot
-                                                .data!
-                                                .docs[index]
-                                            ['image_url'],
-                                            fit: BoxFit.cover,
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('admin')
+                      .doc('offers')
+                      .collection(adminId)
+                      .orderBy('timestamp', descending: true)
+                      .snapshots(),
+                  builder: (
+                      BuildContext context,
+                      AsyncSnapshot snapshot,
+                      ) {
+                    if (snapshot.data == null) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasData) {
+                      return Stack(
+                        children: [
+                          PageView.builder(
+                            onPageChanged: (num) {
+                              setState(() {
+                                _productImages = num;
+                              });
+                            },
+                            itemCount: snapshot.data!.docs.length,
+                            pageSnapping: true,
+                            itemBuilder: (BuildContext context,
+                                int index) {
+                              return Padding(
+                                padding:
+                                const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            spreadRadius: 1,
+                                            blurRadius: 5,
+                                            color: Colors.black,
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            20),
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => Offers(
+                                                title: snapshot.data!.docs[index]['image_url']))
+                                            );
+                                          },
+                                          child: Hero(
+                                            tag: 'home_TO_offers',
+                                            child: Image.network(
+                                              snapshot
+                                                  .data!
+                                                  .docs[index]
+                                              ['image_url'],
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                        Positioned(
-                          bottom: 20,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
-                            children: [
-                              for (var i = 0;i <snapshot.data!.docs.length;i++)
-                                AnimatedContainer(
-                                  duration: Duration(
-                                    milliseconds: 200,
-                                  ),
-                                  curve: Curves.easeOutCubic,
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: 2,
-                                  ),
-                                  width: _productImages == i
-                                      ? 20
-                                      : 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          15),
-                                      color: _productImages == i
-                                          ? Colors.red.shade900
-                                          : Colors.blue.shade800
-                                  ),
-                                ),
-                            ],
+                              );
+                            },
                           ),
-                        ),
-                      ],
-                    );
-                  }
-                  return CircularProgressIndicator();
-                },
+                          Positioned(
+                            bottom: 20,
+                            left: 0,
+                            right: 0,
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: [
+                                for (var i = 0;i <snapshot.data!.docs.length;i++)
+                                  AnimatedContainer(
+                                    duration: Duration(
+                                      milliseconds: 200,
+                                    ),
+                                    curve: Curves.easeOutCubic,
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    width: _productImages == i
+                                        ? 20
+                                        : 8,
+                                    height: 8,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            15),
+                                        color: _productImages == i
+                                            ? Colors.red.shade900
+                                            : Colors.blue.shade800
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    return CircularProgressIndicator();
+                  },
+                ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
 
       floatingActionButton: SpeedDial(
