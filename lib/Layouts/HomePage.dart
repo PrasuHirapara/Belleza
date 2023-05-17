@@ -1,5 +1,6 @@
 import 'package:belleza/Layouts/SideBar.dart';
 import 'package:belleza/Layouts/SideBar_Layouts/Offers.dart';
+import 'package:belleza/Layouts/SideBar_Layouts/SavedDraft.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -209,6 +210,9 @@ class user_HomePageState extends State<HomePage> {
                 foregroundColor: Colors.white,
                 label: 'Saved',
                 labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SavedDraft()));
+                }
             ),
             SpeedDialChild(
               child: Icon(Icons.bookmark_add),
