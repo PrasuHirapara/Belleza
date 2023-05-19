@@ -43,10 +43,7 @@ class user_HomePageState extends State<HomePage> {
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 5,right: 8),
-                child: Hero(
-                  tag: 'homepageTOchatroom',
-                    child: Icon(Icons.message,size: 30,)
-                ),
+                child: Icon(Icons.message,size: 30,),
               )
           )
         ],

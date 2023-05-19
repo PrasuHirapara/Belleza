@@ -65,7 +65,7 @@ class _OffersState extends State<Offers> {
                     padding: const EdgeInsets.all(25),
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
+                        color: Colors.blueGrey[800],
                         borderRadius: BorderRadius.circular(10)
                     ),
                     child: Center(child: Text("Book an Appointment".toUpperCase(),style: const TextStyle(color: Colors.white),)),
