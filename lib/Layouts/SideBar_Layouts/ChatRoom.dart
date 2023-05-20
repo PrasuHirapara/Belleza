@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:belleza/Layouts/HomePage.dart';
+import 'package:belleza/Layouts/SideBar_Layouts/About.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -49,11 +50,11 @@ class _ChatRoomState extends State<ChatRoom> {
         children: [
           SizedBox(height: 38,),
 
-          HomePage.uid == adminId ? Hero(
+          FirebaseAuth.instance.currentUser!.uid == adminId ? Hero(
             tag: 'consultantTOchatroom',
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blueGrey[800],
+                color: Colors.blueGrey[800],
                 borderRadius: BorderRadius.circular(10),
               ),
               width: MediaQuery.of(context).size.width/1.02,
@@ -106,46 +107,155 @@ class _ChatRoomState extends State<ChatRoom> {
                   itemBuilder: (context, index) {
                     bool isMe = (isAdmin ? docs[index]['senderId'] == adminId : docs[index]['senderId'] != adminId);
                     return Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 8
-                      ),
-                      alignment:
-                      isMe ? Alignment.centerRight : Alignment.centerLeft,
-                      child: docs[index]['type'] == 'text' ?
-                        Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: isMe ? Colors.blue[300] : Colors.blueGrey[200],
-                        ),
                         padding: EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15
+                            vertical: 3,
+                            horizontal: 8
                         ),
-                        child: Text(docs[index]['message'],style: TextStyle(color: Colors.black),)
-                      ) :
-                        Container(
-                          width: MediaQuery.of(context).size.width/1.8,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10
-                          ),
-                          child: GestureDetector(
-                            onTap: (){
-                              showDialog(
-                                context: context,
-                                builder: (_) => imageDialog('My Image', docs[index]['image_url'], context)
-                              );
-                            },
-                            child: Hero(
-                              tag: 'chatroomImage',
-                              child: Image(
-                                image: NetworkImage(docs[index]['image_url']),
+                        alignment:
+                        isMe ? Alignment.centerRight : Alignment.centerLeft,
+
+                        child: docs[index]['type'] == 'text' ?
+                        isAdmin ? isMe ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: isMe ? Colors.blue[300] : Colors.blueGrey[200],
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 15
+                                ),
+                                child: Text(docs[index]['message'],style: TextStyle(color: Colors.black),)
+                            ),
+                            SizedBox(width: 3,),
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
+                              },
+                              child: Container(
+                                width: 23,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Hero(
+                                    tag: 'chatroomTOabout',
+                                    child: Image(
+                                      image: AssetImage('assets/icons/doctor.png'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          )
-                      )
+                          ],
+                        ) : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 23,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image(
+                                  image: AssetImage('assets/icons/user_logo.png'),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 3,),
+                            Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: isMe ? Colors.blue[300] : Colors.blueGrey[200],
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 15
+                                ),
+                                child: Text(docs[index]['message'],style: TextStyle(color: Colors.black),)
+                            ),
+                          ],
+                        ) :
+                            isMe ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: isMe ? Colors.blue[300] : Colors.blueGrey[200],
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 15
+                                    ),
+                                    child: Text(docs[index]['message'],style: TextStyle(color: Colors.black),)
+                                ),
+                                SizedBox(width: 3,),
+                                Container(
+                                  width: 23,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image(
+                                      image: AssetImage('assets/icons/user_logo.png'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ) : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
+                                  },
+                                  child: Container(
+                                    width: 23,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Hero(
+                                        tag: 'chatroomTOabout',
+                                        child: Image(
+                                          image: AssetImage('assets/icons/doctor.png'),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 3,),
+                                Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: isMe ? Colors.blue[300] : Colors.blueGrey[200],
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 15
+                                    ),
+                                    child: Text(docs[index]['message'],style: TextStyle(color: Colors.black),)
+                                ),
+                              ],
+                            ) :
+                        Container(
+                            width: MediaQuery.of(context).size.width/1.8,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10
+                            ),
+                            child: GestureDetector(
+                              onTap: (){
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => imageDialog('My Image', docs[index]['image_url'], context)
+                                );
+                              },
+                              child: Hero(
+                                tag: 'chatroomImage',
+                                child: Image(
+                                  image: NetworkImage(docs[index]['image_url']),
+                                ),
+                              ),
+                            )
+                        )
                     );
                   },
                 );
@@ -200,64 +310,64 @@ class _ChatRoomState extends State<ChatRoom> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      icon : Icon(Icons.photo_outlined,size: 27,),
-                      onPressed: ()  async {
-                        ImagePicker imagePicker = ImagePicker();
-                        XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
+                        icon : Icon(Icons.photo_outlined,size: 27,),
+                        onPressed: ()  async {
+                          ImagePicker imagePicker = ImagePicker();
+                          XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
 
-                        String uniqueFileName = Timestamp.now().toString();
+                          String uniqueFileName = Timestamp.now().toString();
 
-                        showDialog(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: Text('Send Image',style: TextStyle(fontSize: 30),),
-                              content: Text('Are you sure want to send Image ?',style: TextStyle(fontSize: 15),),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('NO'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
+                          showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text('Send Image',style: TextStyle(fontSize: 30),),
+                                content: Text('Are you sure want to send Image ?',style: TextStyle(fontSize: 15),),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('NO'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
 
-                                    Reference referenceRoot = FirebaseStorage.instance.ref();
-                                    Reference referenceDirImage = referenceRoot.child('chat/images');
+                                      Reference referenceRoot = FirebaseStorage.instance.ref();
+                                      Reference referenceDirImage = referenceRoot.child('chat/images');
 
-                                    Reference referenceImageToUpload = referenceDirImage.child("$uniqueFileName");
+                                      Reference referenceImageToUpload = referenceDirImage.child("$uniqueFileName");
 
-                                    try{
-                                      await referenceImageToUpload.putFile(File(file!.path));
+                                      try{
+                                        await referenceImageToUpload.putFile(File(file!.path));
 
-                                      String url = await referenceImageToUpload.getDownloadURL();
+                                        String url = await referenceImageToUpload.getDownloadURL();
 
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image Uploaded"),duration: Duration(seconds: 1),));
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image Uploaded"),duration: Duration(seconds: 1),));
 
-                                      FirebaseFirestore.instance
-                                          .collection('chats')
-                                          .doc(widget.title)
-                                          .collection(widget.title)
-                                          .add({
-                                        'image_url' : url,
-                                        'type' : 'image',
-                                        'timestamp': Timestamp.now(),
-                                        'senderId': FirebaseAuth.instance.currentUser!.uid,
-                                      });
+                                        FirebaseFirestore.instance
+                                            .collection('chats')
+                                            .doc(widget.title)
+                                            .collection(widget.title)
+                                            .add({
+                                          'image_url' : url,
+                                          'type' : 'image',
+                                          'timestamp': Timestamp.now(),
+                                          'senderId': FirebaseAuth.instance.currentUser!.uid,
+                                        });
 
-                                      Navigator.of(context, rootNavigator: true).pop();
+                                        Navigator.of(context, rootNavigator: true).pop();
 
-                                    }catch(error){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString()),duration: Duration(seconds: 2),));
-                                      Navigator.of(context, rootNavigator: true).pop();
-                                    }
-                                  },
-                                  child: Text('YES'),
-                                ),
-                              ],
-                            )
-                        );
-                      }
+                                      }catch(error){
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString()),duration: Duration(seconds: 2),));
+                                        Navigator.of(context, rootNavigator: true).pop();
+                                      }
+                                    },
+                                    child: Text('YES'),
+                                  ),
+                                ],
+                              )
+                          );
+                        }
                     ),
                     IconButton(
                         icon: Icon(Icons.send),
