@@ -23,7 +23,10 @@ class _Consultant extends State<Consultant> {
 
         body:StreamBuilder(
            stream:
-             FirebaseFirestore.instance.collection("users").snapshots(),
+             FirebaseFirestore.instance
+                 .collection("users")
+                 .orderBy('message_date', descending: true)
+                 .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapShot){
               if(snapShot.hasData){
                  return ListView.builder(
@@ -38,7 +41,6 @@ class _Consultant extends State<Consultant> {
                          child: Column(
                            children: [
                              SizedBox(height: 20,),
-
                              Hero(
                                tag: 'consultantTOchatroom',
                                child: Container(

@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:belleza/Layouts/HomePage.dart';
 import 'package:belleza/Layouts/SideBar_Layouts/About.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core_dart/firebase_core_dart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -382,6 +382,12 @@ class _ChatRoomState extends State<ChatRoom> {
                               'type' : 'text',
                               'timestamp': Timestamp.now(),
                               'senderId': FirebaseAuth.instance.currentUser!.uid,
+                            });
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .update({
+                              'message_date' : Timestamp.now(),
                             });
                             messageController.clear();
                           }
