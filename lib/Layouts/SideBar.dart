@@ -1,7 +1,5 @@
-import 'package:belleza/Layouts/HomePage.dart';
 import 'package:belleza/Layouts/SideBar_Layouts/SocialMedia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'SideBar_Layouts/About.dart';
@@ -12,7 +10,9 @@ import 'SideBar_Layouts/Policies.dart';
 import 'SideBar_Layouts/Setting.dart';
 
 class SideBar extends StatefulWidget {
-  const SideBar({Key? key}) : super(key: key);
+  SideBar({Key? key,required this.title}) : super(key: key);
+
+  final String title;
 
   @override
   State<SideBar> createState() => _SideBarState();
@@ -33,7 +33,7 @@ class _SideBarState extends State<SideBar> {
               stream:
                 FirebaseFirestore.instance
                     .collection("users")
-                    .where("user_uid",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .where("user_uid",isEqualTo: widget.title)
                     .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapShot){
                 if(snapShot.hasData){
@@ -43,13 +43,6 @@ class _SideBarState extends State<SideBar> {
                       itemBuilder: (context,i){
                     var data = snapShot.data!.docs[i];
 
-                    HomePage.first_name = data['first_name'];
-                    HomePage.last_name = data['last_name'];
-                    HomePage.email = data['email'];
-                    HomePage.registration_date = data['registration_date'];
-                    HomePage.phone_number = data['phone_number'];
-                    HomePage.uid = data['user_uid'];
-
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 9),
                       child: UserAccountsDrawerHeader(
@@ -57,10 +50,10 @@ class _SideBarState extends State<SideBar> {
                             color: Colors.blueGrey,
                             borderRadius: BorderRadius.circular(25)
                           ),
-                          accountName: Text(HomePage.first_name.toString().toUpperCase() + " " + HomePage.last_name.toString().toUpperCase(),
+                          accountName: Text(data['first_name'].toString().toUpperCase() + " " +  data['last_name'].toString().toUpperCase(),
                             style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
                           ),
-                          accountEmail: Text(HomePage.email,
+                          accountEmail: Text(data['email'],
                             style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14,color: Colors.black),
                           ),
                           currentAccountPicture: CircleAvatar(

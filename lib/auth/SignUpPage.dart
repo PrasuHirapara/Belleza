@@ -50,7 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
             "user_uid" : user!.uid.toString(),
             "phone_number": userNumberController.text,
             "registration_date" : currentDateTime,
-            "message_date" : "00/00/0000"
+            "message_time" : "00/00/000"
           };
 
           await FirebaseFirestore.instance.collection('users').doc(user.uid).set(data)

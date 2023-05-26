@@ -14,13 +14,6 @@ import 'SideBar_Layouts/ChatRoom.dart';
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
-  static String first_name = "";
-  static String last_name = "";
-  static String email = "";
-  static String phone_number = "";
-  static String uid = FirebaseAuth.instance.currentUser!.uid;
-  static String registration_date = "";
-
   @override
   State<HomePage> createState() => FirebaseAuth.instance.currentUser!.uid == "ieDmUFNqFMWmZmCLoNldGQqNDcI3" ? admin_HomePageState() : user_HomePageState();
 }
@@ -32,14 +25,14 @@ class user_HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[350],
-      drawer: SideBar(),
+      drawer: SideBar(title: FirebaseAuth.instance.currentUser!.uid),
 
       appBar: AppBar(
         title: Center(child: Text("belleza".toUpperCase(),style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.black),)),
         actions: [
           GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom(title: HomePage.uid)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom(title: FirebaseAuth.instance.currentUser!.uid)));
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 5,right: 8),

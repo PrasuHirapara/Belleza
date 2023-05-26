@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:belleza/Layouts/SideBar_Layouts/About.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core_dart/firebase_core_dart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../Constants/Admin.dart';
+import 'Profile.dart';
 
 class ChatRoom extends StatefulWidget {
   ChatRoom({Key? key, required this.title}) : super(key: key);
@@ -20,6 +20,7 @@ class ChatRoom extends StatefulWidget {
 class _ChatRoomState extends State<ChatRoom> {
 
   final _formKey = GlobalKey<FormState>();
+  final isAdmin = FirebaseAuth.instance.currentUser!.uid == 'ieDmUFNqFMWmZmCLoNldGQqNDcI3';
   var userName = "";
   TextEditingController messageController = TextEditingController();
 
@@ -113,7 +114,6 @@ class _ChatRoomState extends State<ChatRoom> {
                         ),
                         alignment:
                         isMe ? Alignment.centerRight : Alignment.centerLeft,
-
                         child: docs[index]['type'] == 'text' ?
                         isAdmin ? isMe ? Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -148,16 +148,25 @@ class _ChatRoomState extends State<ChatRoom> {
                               ),
                             ),
                           ],
-                        ) : Row(
+                        ) :
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 23,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image(
-                                  image: AssetImage('assets/icons/user_logo.png'),
-                                  fit: BoxFit.fill,
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(title: widget.title,)));
+                              },
+                              child: Container(
+                                width: 23,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Hero(
+                                    tag: 'chatroomTOprofile',
+                                    child: Image(
+                                      image: AssetImage('assets/icons/user_logo.png'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -190,16 +199,25 @@ class _ChatRoomState extends State<ChatRoom> {
                                 SizedBox(width: 3,),
                                 Container(
                                   width: 23,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Image(
-                                      image: AssetImage('assets/icons/user_logo.png'),
-                                      fit: BoxFit.fill,
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(title: widget.title,)));
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Hero(
+                                        tag: 'chatroomTOprofile',
+                                        child: Image(
+                                          image: AssetImage('assets/icons/user_logo.png'),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
-                            ) : Row(
+                            ) :
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 GestureDetector(
@@ -281,6 +299,7 @@ class _ChatRoomState extends State<ChatRoom> {
                           child: Container(
                             child: TextFormField(
                               controller: messageController,
+                              textInputAction: TextInputAction.next,
                               validator: (value){
                                 if(value!.isEmpty){
                                   return 'Enter a Message';
@@ -371,7 +390,7 @@ class _ChatRoomState extends State<ChatRoom> {
                     ),
                     IconButton(
                         icon: Icon(Icons.send),
-                        onPressed: () {
+                        onPressed: () async {
                           if(_formKey.currentState!.validate() && messageController.text.toString().trim() != ""){
                             FirebaseFirestore.instance
                                 .collection('chats')
@@ -382,12 +401,6 @@ class _ChatRoomState extends State<ChatRoom> {
                               'type' : 'text',
                               'timestamp': Timestamp.now(),
                               'senderId': FirebaseAuth.instance.currentUser!.uid,
-                            });
-                            FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(FirebaseAuth.instance.currentUser!.uid)
-                                .update({
-                              'message_date' : Timestamp.now(),
                             });
                             messageController.clear();
                           }

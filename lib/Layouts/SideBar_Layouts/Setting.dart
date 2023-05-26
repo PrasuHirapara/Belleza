@@ -63,7 +63,7 @@ class _SettingState extends State<Setting> {
                 ),
                 child: ListTile(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(title: FirebaseAuth.instance.currentUser!.uid,)));
                   },
                   leading: Icon(Icons.perm_identity, size: 35, color: Colors.black,),
                   title: Text("\t\tProfile",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),

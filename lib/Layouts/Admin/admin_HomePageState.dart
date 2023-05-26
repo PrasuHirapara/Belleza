@@ -22,7 +22,7 @@ class admin_HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.grey[350],
-      drawer: SideBar(),
+      drawer: SideBar(title: FirebaseAuth.instance.currentUser!.uid,),
 
       appBar: AppBar(
         title: Center(child: Text("belleza".toUpperCase(),style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.black),)),
@@ -196,54 +196,54 @@ class admin_HomePageState extends State<HomePage> {
               label: 'Upload Document',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () async {
-                 ImagePicker imagePicker = ImagePicker();
-                 XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
+                ImagePicker imagePicker = ImagePicker();
+                XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
 
-                 String uniqueFileName = Timestamp.now().toString();
+                String uniqueFileName = Timestamp.now().toString();
 
-                 showDialog(
-                     context: context,
-                     builder: (ctx) => AlertDialog(
-                       title: Text('Upload Image',style: TextStyle(fontSize: 30),),
-                       content: Text('Are you sure want to Upload Image ?',style: TextStyle(fontSize: 15),),
-                       actions: [
-                         TextButton(
-                           onPressed: () {
-                             Navigator.pop(context);
-                           },
-                           child: Text('NO'),
-                         ),
-                         TextButton(
-                           onPressed: () async {
+                showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text('Upload Image',style: TextStyle(fontSize: 30),),
+                      content: Text('Are you sure want to Upload Image ?',style: TextStyle(fontSize: 15),),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('NO'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
 
-                             Reference referenceRoot = FirebaseStorage.instance.ref();
-                             Reference referenceDirImage = referenceRoot.child('admin/offers');
+                            Reference referenceRoot = FirebaseStorage.instance.ref();
+                            Reference referenceDirImage = referenceRoot.child('admin/offers');
 
-                             Reference referenceImageToUpload = referenceDirImage.child("$uniqueFileName");
+                            Reference referenceImageToUpload = referenceDirImage.child("$uniqueFileName");
 
-                             try{
-                               await referenceImageToUpload.putFile(File(file!.path));
+                            try{
+                              await referenceImageToUpload.putFile(File(file!.path));
 
-                               String url = await referenceImageToUpload.getDownloadURL();
+                              String url = await referenceImageToUpload.getDownloadURL();
 
-                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image Uploaded"),duration: Duration(seconds: 1),));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image Uploaded"),duration: Duration(seconds: 1),));
 
-                               FirebaseFirestore.instance
-                                   .collection('admin')
-                                   .doc('offers')
-                                   .collection(FirebaseAuth.instance.currentUser!.uid)
-                                   .add({
-                                 'image_url': url,
-                                 'timestamp': Timestamp.now(),
-                               });
+                              FirebaseFirestore.instance
+                                  .collection('admin')
+                                  .doc('offers')
+                                  .collection(FirebaseAuth.instance.currentUser!.uid)
+                                  .add({
+                                'image_url': url,
+                                'timestamp': Timestamp.now(),
+                              });
 
-                               Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true).pop();
 
-                             }catch(error){
-                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString()),duration: Duration(seconds: 2),));
-                               Navigator.of(context, rootNavigator: true).pop();
-                             }
-                           },
+                            }catch(error){
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString()),duration: Duration(seconds: 2),));
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }
+                          },
                            child: Text('YES'),
                          ),
                        ],

@@ -25,7 +25,7 @@ class _Consultant extends State<Consultant> {
            stream:
              FirebaseFirestore.instance
                  .collection("users")
-                 .orderBy('message_date', descending: true)
+                 .orderBy('message_time', descending: true)
                  .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapShot){
               if(snapShot.hasData){
